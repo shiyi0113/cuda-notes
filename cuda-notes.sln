@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VectorSum", "VectorSum\VectorSum.vcxproj", "{71C2836B-22F7-CEA2-CE4A-9349FA1E9E94}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PixelGray", "PixelGray\PixelGray.vcxproj", "{82B79FF6-4F5B-9947-C1AD-9686024FCA30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{71C2836B-22F7-CEA2-CE4A-9349FA1E9E94}.Debug|x64.Build.0 = Debug|x64
 		{71C2836B-22F7-CEA2-CE4A-9349FA1E9E94}.Release|x64.ActiveCfg = Release|x64
 		{71C2836B-22F7-CEA2-CE4A-9349FA1E9E94}.Release|x64.Build.0 = Release|x64
+		{82B79FF6-4F5B-9947-C1AD-9686024FCA30}.Debug|x64.ActiveCfg = Debug|x64
+		{82B79FF6-4F5B-9947-C1AD-9686024FCA30}.Debug|x64.Build.0 = Debug|x64
+		{82B79FF6-4F5B-9947-C1AD-9686024FCA30}.Release|x64.ActiveCfg = Release|x64
+		{82B79FF6-4F5B-9947-C1AD-9686024FCA30}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
