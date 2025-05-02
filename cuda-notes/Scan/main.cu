@@ -3,7 +3,7 @@
 #include <iostream>
 #include <random>
 
-#define VECTOR_SIZE 2048
+#define VECTOR_SIZE 1024
 
 void sequential_scan(float* x_h, float* y_h, int n) {
 	y_h[0] = x_h[0];
@@ -20,7 +20,62 @@ bool areFloatArrayEqual(const float* x, const float* y, int size, float epsilon 
 	}
 	return true;
 }
+__global__
+void kogge_stone_scan_double_buffer_kernel(float* x_d, float* y_d, int n) {
+	extern __shared__ float buffer[];
+	float* XY0 = buffer;
+	float* XY1 = buffer + blockDim.x;
 
+	size_t i = blockIdx.x * blockDim.x + threadIdx.x;
+	// 数据先加载到缓冲区0
+	if (i < n) {
+		XY0[threadIdx.x] = x_d[i];
+	}
+	else {
+		XY0[threadIdx.x] = 0.0f;
+	}
+	bool flag = true;
+	for (size_t step = 1; step < blockDim.x; step *= 2) {
+		__syncthreads();
+		if (flag) {
+			if (threadIdx.x >= step)
+				XY1[threadIdx.x] = XY0[threadIdx.x] + XY0[threadIdx.x - step];
+			else
+				XY1[threadIdx.x] = XY0[threadIdx.x];
+			flag = false;
+		}
+		else {
+			if (threadIdx.x >= step)
+				XY0[threadIdx.x] = XY1[threadIdx.x] + XY1[threadIdx.x - step];
+			else
+				XY0[threadIdx.x] = XY1[threadIdx.x];
+			flag = true;
+		}
+	}
+	__syncthreads();
+	if (i < n) {
+		if(flag)
+			y_d[i] = XY0[threadIdx.x];
+		else
+			y_d[i] = XY1[threadIdx.x];
+	}
+}
+void kogge_stone_scan_double_buffer(float* x_h, float* y_h, int n) {
+	float* x_d, * y_d;
+	cudaMalloc((void**)&x_d, n * sizeof(float));
+	cudaMalloc((void**)&y_d, n * sizeof(float));
+	cudaMemcpy(x_d, x_h, n * sizeof(float), cudaMemcpyHostToDevice);
+	dim3 blockSize(n);
+	dim3 blockNum((n + blockSize.x - 1) / blockSize.x);
+	kogge_stone_scan_double_buffer_kernel << <blockNum, blockSize, 2 * blockSize.x * sizeof(float) >> > (x_d, y_d, n);
+	cudaError_t err = cudaGetLastError();
+	if (err != cudaSuccess) {
+		std::cerr << "CUDA Error: " << cudaGetErrorString(err) << std::endl;
+	}
+	cudaMemcpy(y_h, y_d, n * sizeof(float), cudaMemcpyDeviceToHost);
+	cudaFree(x_d);
+	cudaFree(y_d);
+}
 __global__
 void kogge_stone_scan_kernel(float* x_d, float* y_d, int n) {
 	extern __shared__ float XY[];
@@ -129,7 +184,7 @@ int main() {
 	float* y_h_cpu = (float*)malloc(VECTOR_SIZE * sizeof(float));
 	float* y_h_gpu = (float*)malloc(VECTOR_SIZE * sizeof(float));
 	sequential_scan(x_h, y_h_cpu, VECTOR_SIZE);
-	brent_kung_scan(x_h, y_h_gpu, VECTOR_SIZE);
+	kogge_stone_scan_double_buffer(x_h, y_h_gpu, VECTOR_SIZE);
 	
 	if (areFloatArrayEqual(y_h_cpu, y_h_gpu, VECTOR_SIZE))
 		std::cout << "true"<<std::endl;
