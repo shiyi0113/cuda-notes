@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MatrixMultiplier", "MatrixM
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SumReduction", "SumReduction\SumReduction.vcxproj", "{99AE915E-259A-7D26-2357-D04CB33747F4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scan", "Scan\Scan.vcxproj", "{73EC23A5-E29A-C288-D638-DBE2A2103221}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,6 +35,10 @@ Global
 		{99AE915E-259A-7D26-2357-D04CB33747F4}.Debug|x64.Build.0 = Debug|x64
 		{99AE915E-259A-7D26-2357-D04CB33747F4}.Release|x64.ActiveCfg = Release|x64
 		{99AE915E-259A-7D26-2357-D04CB33747F4}.Release|x64.Build.0 = Release|x64
+		{73EC23A5-E29A-C288-D638-DBE2A2103221}.Debug|x64.ActiveCfg = Debug|x64
+		{73EC23A5-E29A-C288-D638-DBE2A2103221}.Debug|x64.Build.0 = Debug|x64
+		{73EC23A5-E29A-C288-D638-DBE2A2103221}.Release|x64.ActiveCfg = Release|x64
+		{73EC23A5-E29A-C288-D638-DBE2A2103221}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
